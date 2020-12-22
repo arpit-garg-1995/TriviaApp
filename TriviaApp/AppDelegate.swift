@@ -77,6 +77,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    func saveModel(_ id: String,_ name: String, _ crickter: String,_ date:String, _ colors: [String] ){
+        let managedContext = persistentContainer.viewContext
+        let model = GamePerson(context: managedContext)
+        
+        // 3
+        model.id = id
+        model.name = name
+        model.cricketer = crickter
+        model.date = date
+        model.colors = colors
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func getModels()->[GamePerson]{
+        var models: [GamePerson] = []
+        let managedContext = persistentContainer.viewContext
+        
+        //2
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "GamePerson")
+        
+        //3
+        do {
+          models = try managedContext.fetch(fetchRequest) as! [GamePerson]
+        } catch let error as NSError {
+          print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return models
+    }
 
 }
 
